@@ -1,4 +1,2 @@
-for (i := I; i < V; i := i + I)
-end
-for (index := 1; index <= 10; index := index + 1) do
-
+x := 0x1 + y * ( z - 0xABC )
+a := b / ( c + 2 )

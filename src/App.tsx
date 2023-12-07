@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const LoopOperatorAnalyzer: React.FC = () => {
+const ArithmeticExpressionAnalyzer: React.FC = () => {
   const [tokens, setTokens] = useState<
     { number: number; lexeme: string; value: string }[]
   >([]);
@@ -26,38 +26,38 @@ const LoopOperatorAnalyzer: React.FC = () => {
     input: string
   ): { number: number; lexeme: string; value: string }[] {
     const tokens: { number: number; lexeme: string; value: string }[] = [];
-    const operators = ["for", ";", "<", ">", "=", "do", "(", ")", ":="];
-    const constants = ["I", "II", "III", "IV", "V"];
+    const operators = ["+", "-", "*", "/", "(", ")", ":="];
+    const hexRegex = /0x[0-9a-fA-F]+/;
     const identifierRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
 
-    const lines = input.split(";");
+    const expressions = input.split(";");
 
     let tokenNumber = 1;
 
-    lines.forEach((line, lineIndex) => {
-      const words = line.trim().split(/\s+/).filter(Boolean);
+    expressions.forEach((expression, expressionIndex) => {
+      const elements = expression.trim().split(/\s+/).filter(Boolean);
 
-      words.forEach((word) => {
-        if (operators.includes(word.toLowerCase())) {
+      elements.forEach((element) => {
+        if (operators.includes(element)) {
           tokens.push({
             number: tokenNumber++,
-            lexeme: "Оператор цикла",
-            value: word,
+            lexeme: "Оператор",
+            value: element,
           });
-        } else if (constants.includes(word.toUpperCase())) {
+        } else if (hexRegex.test(element)) {
           tokens.push({
             number: tokenNumber++,
-            lexeme: "Римское число",
-            value: word,
+            lexeme: "Шестнадцатеричное число",
+            value: element,
           });
-        } else if (identifierRegex.test(word)) {
+        } else if (identifierRegex.test(element)) {
           tokens.push({
             number: tokenNumber++,
             lexeme: "Идентификатор",
-            value: word,
+            value: element,
           });
         } else {
-          setError(`Ошибка в строке ${lineIndex + 1}: ${word}`);
+          setError(`Ошибка в строке ${expressionIndex + 1}: ${element}`);
         }
       });
     });
@@ -91,4 +91,4 @@ const LoopOperatorAnalyzer: React.FC = () => {
   );
 };
 
-export default LoopOperatorAnalyzer;
+export default ArithmeticExpressionAnalyzer;

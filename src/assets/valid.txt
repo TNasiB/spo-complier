@@ -1,4 +1,2 @@
-for ( II := I; II < V; II := II > I ) do
-end;
-for ( II := I; II < V; index := II > I ) do
-end;
+x := 0x1 + y * ( z - 0xABC );
+a := b / ( c + d );
