@@ -1,10 +1,4 @@
-if a > b then
-    c := IV;
-    if x = y then
-        z := 123;
-    else
-        z := MCMXC;
-    end if;
-else
-    c := CCC;
-end if;
+for ( II := I; II < V; II := II > I ) do
+end;
+for ( II := I; II < V; index := II > I ) do
+end;
