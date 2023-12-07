@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const LogicalExpressionAnalyzer: React.FC = () => {
+const ConditionalOperatorAnalyzer: React.FC = () => {
   const [tokens, setTokens] = useState<
     { number: number; type: string; lexeme: string; value: string }[]
   >([]);
@@ -22,33 +22,58 @@ const LogicalExpressionAnalyzer: React.FC = () => {
     }
   };
 
+  function isRomanNumber(input: string): boolean {
+    const romanNumerals = ["I", "V", "X", "L", "C", "D", "M"];
+    const romanRegex = /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+
+    return (
+      romanRegex.test(input) &&
+      input.split("").every((numeral) => romanNumerals.includes(numeral))
+    );
+  }
+
   function lexicalAnalysis(
     input: string
   ): { number: number; type: string; lexeme: string; value: string }[] {
     const tokens: { number: number; type: string; lexeme: string; value: string }[] = [];
-    const operators = ["or", "and", "xor", "not", "(", ")", ":="];
-    const constants = ["0", "1"];
+    const operators = ["+", "-", "*", "/", "(", ")", ":="];
+    const keywords = ["if", "then", "else"]; // Добавлены ключевые слова
+    const comparisonOperators = ["<", ">", "="]; // Добавлены операторы сравнения
 
     const lines = input.split(";");
 
     let tokenNumber = 1;
 
     lines.forEach((line, lineIndex) => {
-      const words = line.trim().split(/\s+/).filter(Boolean); // Фильтр пустых значений
+      const words = line.trim().split(/\s+/);
 
-      words.forEach((word) => {
-        if (operators.includes(word.toLowerCase())) {
+      words.forEach((word, wordIndex) => {
+        if (operators.includes(word)) {
           tokens.push({
             number: tokenNumber++,
             type: "Operator",
             lexeme: "Знак операции",
             value: word,
           });
-        } else if (constants.includes(word)) {
+        } else if (keywords.includes(word)) {
           tokens.push({
             number: tokenNumber++,
-            type: "Constant",
-            lexeme: "Константа",
+            type: "Keyword",
+            lexeme: "Ключевое слово",
+            value: word,
+          });
+        } else if (comparisonOperators.includes(word)) {
+          tokens.push({
+            number: tokenNumber++,
+            type: "Comparison Operator",
+            lexeme: "Оператор сравнения",
+            value: word,
+          });
+        } else if (isRomanNumber(word)) {
+          tokens.push({
+            number: tokenNumber++,
+            type: "Roman Number",
+            lexeme: "Римское число",
             value: word,
           });
         } else if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(word)) {
@@ -58,22 +83,15 @@ const LogicalExpressionAnalyzer: React.FC = () => {
             lexeme: "Идентификатор",
             value: word,
           });
-        } else if (word === ":=") {
+        } else if (/^\d+$/.test(word)) {
           tokens.push({
             number: tokenNumber++,
-            type: "Assignment Operator",
-            lexeme: "Знак присваивания",
-            value: word,
-          });
-        } else if (word === "(" || word === ")") {
-          tokens.push({
-            number: tokenNumber++,
-            type: "Parenthesis",
-            lexeme: "Круглая скобка",
+            type: "Number",
+            lexeme: "Число",
             value: word,
           });
         } else {
-          setError(`Ошибка в строке ${lineIndex + 1}, слово: ${word}`);
+          setError(`Ошибка в строке ${lineIndex + 1}, слово ${wordIndex + 1}: ${word}`);
         }
       });
     });
@@ -107,4 +125,4 @@ const LogicalExpressionAnalyzer: React.FC = () => {
   );
 };
 
-export default LogicalExpressionAnalyzer;
+export default ConditionalOperatorAnalyzer;
