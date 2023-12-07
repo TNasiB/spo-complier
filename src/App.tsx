@@ -34,10 +34,7 @@ const LogicalExpressionAnalyzer: React.FC = () => {
     let tokenNumber = 1;
 
     lines.forEach((line, lineIndex) => {
-      const words = line
-        .trim()
-        .split(/(\s+|\(|\))/)
-        .filter(Boolean);
+      const words = line.trim().split(/\s+/).filter(Boolean); // Фильтр пустых значений
 
       words.forEach((word) => {
         if (operators.includes(word.toLowerCase())) {
@@ -76,7 +73,7 @@ const LogicalExpressionAnalyzer: React.FC = () => {
             value: word,
           });
         } else {
-          setError(`Ошибка в строке ${lineIndex + 1}: ${word}`);
+          setError(`Ошибка в строке ${lineIndex + 1}, слово: ${word}`);
         }
       });
     });
