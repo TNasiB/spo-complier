@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { Button } from "primereact/button";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Card } from "primereact/card";
+import { Message } from "primereact/message";
 
 const ConditionalOperatorAnalyzer: React.FC = () => {
   const [tokens, setTokens] = useState<
     { number: number; type: string; lexeme: string; value: string }[]
   >([]);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string[]>([]);
+  const [code, setCode] = useState("");
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
@@ -13,7 +21,11 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
       const reader = new FileReader();
       reader.onload = (e) => {
         if (e.target && e.target.result) {
+          setError([]);
+          setCode("");
+          setTokens([]);
           const content = e.target.result as string;
+          setCode(content);
           const lexemes = lexicalAnalysis(content);
           setTokens(lexemes);
         }
@@ -77,6 +89,10 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
         } else if (word === "") {
           // Пустая строка
         } else {
+          setError((prev) => [
+            ...prev,
+            `Ошибка в строке ${lineIndex + 1}, слово ${wordIndex + 1}`,
+          ]);
           tokens.push({
             number: tokenNumber++,
             type: "Error",
@@ -91,30 +107,68 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
   }
 
   return (
-    <div>
-      <input type="file" onChange={handleFileUpload} />
-      {error && <p>{error}</p>}
-      <table>
-        <thead>
-          <tr>
-            <th>№ лексемы</th>
-            <th>Лексема</th>
-            <th>Значение</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tokens.map((token) => (
-            <tr
-              style={{ background: token.type === "Error" ? "red" : "transparent" }}
-              key={token.number}
-            >
-              <td>{token.number}</td>
-              <td>{token.lexeme}</td>
-              <td>{token.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+        <Card
+          title="Загрузка файла"
+          style={{ width: "100%" }}
+          className={tokens.length === 0 ? "empty" : "default"}
+        >
+          <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+            <Button
+              label="Загрузить файл"
+              onClick={() => {
+                inputRef.current?.click();
+              }}
+            />
+            <input
+              style={{ display: "none" }}
+              ref={inputRef}
+              type="file"
+              onChange={handleFileUpload}
+            />
+
+            {code && <InputTextarea value={code} rows={20} cols={40} />}
+          </div>
+        </Card>
+        {error.length !== 0 && (
+          <Card title="Статус" style={{ display: "flex", justifyContent: "center" }}>
+            {error.map((elem) => {
+              return <Message key={elem} severity="error" text={error} />;
+            })}
+          </Card>
+        )}
+        {error.length === 0 && code !== "" && (
+          <Card title="Статус" style={{ display: "flex", justifyContent: "center" }}>
+            <Message severity="success" text="Ошибок нет" />
+          </Card>
+        )}
+      </div>
+      {tokens.length !== 0 && (
+        <DataTable value={tokens} tableStyle={{ minWidth: "50rem" }}>
+          <Column
+            field="number"
+            header="Индекс"
+            bodyClassName={(rowData) =>
+              rowData.lexeme.includes("Ошибка") ? "red" : "none"
+            }
+          ></Column>
+          <Column
+            field="lexeme"
+            header="Тип"
+            bodyClassName={(rowData) =>
+              rowData.lexeme.includes("Ошибка") ? "red" : "none"
+            }
+          ></Column>
+          <Column
+            field="value"
+            header="Значение"
+            bodyClassName={(rowData) =>
+              rowData.lexeme.includes("Ошибка") ? "red" : "none"
+            }
+          ></Column>
+        </DataTable>
+      )}
     </div>
   );
 };
