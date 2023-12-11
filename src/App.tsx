@@ -36,7 +36,6 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
 
     lines.forEach((line, lineIndex) => {
       const withoutComments = line.split("{")[0].trim(); // Убираем комментарии
-
       const words = withoutComments.trim().split(/\s+/);
 
       words.forEach((word, wordIndex) => {
@@ -75,8 +74,15 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
             lexeme: "Число",
             value: word,
           });
+        } else if (word === "") {
+          // Пустая строка
         } else {
-          setError(`Ошибка в строке ${lineIndex + 1}, слово ${wordIndex + 1}: ${word}`);
+          tokens.push({
+            number: tokenNumber++,
+            type: "Error",
+            lexeme: `Ошибка в строке ${lineIndex + 1}, слово ${wordIndex + 1}`,
+            value: word,
+          });
         }
       });
     });
@@ -98,7 +104,10 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
         </thead>
         <tbody>
           {tokens.map((token) => (
-            <tr key={token.number}>
+            <tr
+              style={{ background: token.type === "Error" ? "red" : "transparent" }}
+              key={token.number}
+            >
               <td>{token.number}</td>
               <td>{token.lexeme}</td>
               <td>{token.value}</td>

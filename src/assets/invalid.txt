@@ -4,8 +4,8 @@ if a > b then
         z := 123;
     else
         z := MCMXC;
-    end if;
+    end if; µ
 else
-    c := CCC;
-    d123 := 5; // Ошибка: Неверный идентификатор
+    c := CCC
+    d123 := 5; 
 end if;

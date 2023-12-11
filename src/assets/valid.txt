@@ -1,10 +1,10 @@
 if a > b then
     c := IV;
-    if x = y then
-        z := 123;
+    if x = y then;
+        z := 123; {присваивание}
     else
         z := MCMXC;
-    end if;
+    if;
 else
     c := CCC;
-end if;
+if
