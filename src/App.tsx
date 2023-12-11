@@ -35,7 +35,9 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
     let tokenNumber = 1;
 
     expressions.forEach((expression, expressionIndex) => {
-      const elements = expression.trim().split(/\s+/).filter(Boolean);
+      const withoutComments = expression.split("{")[0].trim(); // Убираем комментарии
+
+      const elements = withoutComments.trim().split(/\s+/).filter(Boolean);
 
       elements.forEach((element) => {
         if (operators.includes(element)) {
@@ -57,7 +59,11 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
             value: element,
           });
         } else {
-          setError(`Ошибка в строке ${expressionIndex + 1}: ${element}`);
+          tokens.push({
+            number: tokenNumber++,
+            lexeme: `Ошибка в строке ${expressionIndex + 1}: ${element}`,
+            value: element,
+          });
         }
       });
     });
