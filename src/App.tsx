@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { Button } from "primereact/button";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Message } from "primereact/message";
 
 const LoopOperatorAnalyzer: React.FC = () => {
   const [tokens, setTokens] = useState<
     { number: number; lexeme: string; value: string }[]
   >([]);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string[]>([]);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [code, setCode] = useState("");
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
@@ -14,6 +21,7 @@ const LoopOperatorAnalyzer: React.FC = () => {
       reader.onload = (e) => {
         if (e.target && e.target.result) {
           const content = e.target.result as string;
+          setCode(content);
           const lexemes = lexicalAnalysis(content);
           setTokens(lexemes);
         }
@@ -57,7 +65,12 @@ const LoopOperatorAnalyzer: React.FC = () => {
             value: word,
           });
         } else {
-          setError(`Ошибка в строке ${lineIndex + 1}: ${word}`);
+          tokens.push({
+            number: tokenNumber++,
+            lexeme: "Ошибка",
+            value: word,
+          });
+          setError((prev) => [...prev, `Ошибка в строке ${lineIndex + 1}: ${word}`]);
         }
       });
     });
@@ -67,26 +80,47 @@ const LoopOperatorAnalyzer: React.FC = () => {
 
   return (
     <div>
-      <input type="file" onChange={handleFileUpload} />
-      {error && <p>{error}</p>}
-      <table>
-        <thead>
-          <tr>
-            <th>№ лексемы</th>
-            <th>Лексема</th>
-            <th>Значение</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tokens.map((token) => (
-            <tr key={token.number}>
-              <td>{token.number}</td>
-              <td>{token.lexeme}</td>
-              <td>{token.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <center>
+        <h1> Файзуллин А.И ИВТ-424</h1>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "5px", width: "400px" }}
+        >
+          {error &&
+            error.map((elem) => {
+              return <Message key={elem} severity="error" text={elem} />;
+            })}
+          {error.length === 0 && code !== "" && <Message severity="success" />}
+        </div>
+      </center>
+
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          
+          <Button
+            size="small"
+            label="Загрузить файл"
+            severity="warning"
+            onClick={() => {
+              if (inputRef.current !== null) {
+                inputRef.current.click();
+              }
+            }}
+          />
+          <input
+            ref={inputRef}
+            style={{ display: "none" }}
+            type="file"
+            onChange={handleFileUpload}
+          />
+          <InputTextarea value={code} rows={10} cols={30} placeholder="Здесь будет код" />
+        </div>
+
+        <DataTable value={tokens} tableStyle={{ minWidth: "50rem" }} emptyMessage="Пусто">
+          <Column field="number" header="Индекс"></Column>
+          <Column field="lexeme" header="Тип"></Column>
+          <Column field="value" header="Значение"></Column>
+        </DataTable>
+      </div>
     </div>
   );
 };
