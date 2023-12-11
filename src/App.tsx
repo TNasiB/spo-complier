@@ -75,7 +75,12 @@ const LogicalExpressionAnalyzer: React.FC = () => {
             value: word,
           });
         } else {
-          setError(`Ошибка в строке ${lineIndex + 1}, слово: ${word}`);
+          tokens.push({
+            number: tokenNumber++,
+            type: "Error",
+            lexeme: `Ошибка в строке ${lineIndex + 1}, слово: ${word}`,
+            value: word,
+          });
         }
       });
     });
