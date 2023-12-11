@@ -22,16 +22,6 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
     }
   };
 
-  function isRomanNumber(input: string): boolean {
-    const romanNumerals = ["I", "V", "X", "L", "C", "D", "M"];
-    const romanRegex = /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
-
-    return (
-      romanRegex.test(input) &&
-      input.split("").every((numeral) => romanNumerals.includes(numeral))
-    );
-  }
-
   function lexicalAnalysis(
     input: string
   ): { number: number; type: string; lexeme: string; value: string }[] {
@@ -45,7 +35,9 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
     let tokenNumber = 1;
 
     lines.forEach((line, lineIndex) => {
-      const words = line.trim().split(/\s+/);
+      const withoutComments = line.split("{")[0].trim(); // Убираем комментарии
+
+      const words = withoutComments.trim().split(/\s+/);
 
       words.forEach((word, wordIndex) => {
         if (operators.includes(word)) {
@@ -67,13 +59,6 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
             number: tokenNumber++,
             type: "Comparison Operator",
             lexeme: "Оператор сравнения",
-            value: word,
-          });
-        } else if (isRomanNumber(word)) {
-          tokens.push({
-            number: tokenNumber++,
-            type: "Roman Number",
-            lexeme: "Римское число",
             value: word,
           });
         } else if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(word)) {
