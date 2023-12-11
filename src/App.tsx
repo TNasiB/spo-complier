@@ -1,10 +1,17 @@
 import React, { useState } from "react";
+import { Input, Table } from "antd";
+import Column from "antd/es/table/Column";
+import "./global.scss";
+import { Alert } from "antd";
+
+const { TextArea } = Input;
 
 const ArithmeticExpressionAnalyzer: React.FC = () => {
   const [tokens, setTokens] = useState<
     { number: number; lexeme: string; value: string }[]
   >([]);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string[]>([]);
+  const [code, setCode] = useState("");
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
@@ -14,6 +21,7 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
       reader.onload = (e) => {
         if (e.target && e.target.result) {
           const content = e.target.result as string;
+          setCode(content);
           const lexemes = lexicalAnalysis(content);
           setTokens(lexemes);
         }
@@ -59,6 +67,10 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
             value: element,
           });
         } else {
+          setError((prev) => [
+            ...prev,
+            `Ошибка в строке ${expressionIndex + 1}: ${element}`,
+          ]);
           tokens.push({
             number: tokenNumber++,
             lexeme: `Ошибка в строке ${expressionIndex + 1}: ${element}`,
@@ -73,26 +85,36 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
 
   return (
     <div>
-      <input type="file" onChange={handleFileUpload} />
-      {error && <p>{error}</p>}
-      <table>
-        <thead>
-          <tr>
-            <th>№ лексемы</th>
-            <th>Лексема</th>
-            <th>Значение</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tokens.map((token) => (
-            <tr key={token.number}>
-              <td>{token.number}</td>
-              <td>{token.lexeme}</td>
-              <td>{token.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <center>
+        <h2>Штурмина В.А. ИВТ-424 ЛБ2</h2>
+      </center>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+          <Input type="file" onChange={handleFileUpload} />
+
+          <TextArea
+            placeholder="Код "
+            name=""
+            id=""
+            cols={30}
+            rows={10}
+            value={code}
+          ></TextArea>
+
+          {error &&
+            error.map((elem) => {
+              return <Alert key={elem} message={elem} type="error" showIcon />;
+            })}
+          {code !== "" && error.length === 0 && (
+            <Alert message={"Успешно"} type="success" showIcon />
+          )}
+        </div>
+        <Table dataSource={tokens} style={{ width: "50%" }} pagination={false}>
+          <Column title="Индекс" dataIndex="number" key="address" />
+          <Column title="Тип" dataIndex="lexeme" key="address" />
+          <Column title="Значение" dataIndex="value" key="address" />
+        </Table>
+      </div>
     </div>
   );
 };
