@@ -10,7 +10,7 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
   const [tokens, setTokens] = useState<
     { number: number; lexeme: string; value: string }[]
   >([]);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string[]>([]);
   const [code, setCode] = useState("");
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,6 +67,10 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
             value: element,
           });
         } else {
+          setError((prev) => [
+            ...prev,
+            `Ошибка в строке ${expressionIndex + 1}: ${element}`,
+          ]);
           tokens.push({
             number: tokenNumber++,
             lexeme: `Ошибка в строке ${expressionIndex + 1}: ${element}`,
@@ -97,8 +101,11 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
             value={code}
           ></TextArea>
 
-          {error && <Alert message={error} type="error" showIcon />}
-          {code !== "" && error === "" && (
+          {error &&
+            error.map((elem) => {
+              return <Alert key={elem} message={elem} type="error" showIcon />;
+            })}
+          {code !== "" && error.length === 0 && (
             <Alert message={"Успешно"} type="success" showIcon />
           )}
         </div>
