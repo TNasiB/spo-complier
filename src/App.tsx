@@ -65,6 +65,11 @@ const LoopOperatorAnalyzer: React.FC = () => {
             value: word,
           });
         } else {
+          tokens.push({
+            number: tokenNumber++,
+            lexeme: "Ошибка",
+            value: word,
+          });
           setError((prev) => [...prev, `Ошибка в строке ${lineIndex + 1}: ${word}`]);
         }
       });
@@ -77,11 +82,20 @@ const LoopOperatorAnalyzer: React.FC = () => {
     <div>
       <center>
         <h1> Файзуллин А.И ИВТ-424</h1>
-        {error && <p>{error}</p>}
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "5px", width: "400px" }}
+        >
+          {error &&
+            error.map((elem) => {
+              return <Message key={elem} severity="error" text={elem} />;
+            })}
+          {error.length === 0 && code !== "" && <Message severity="success" />}
+        </div>
       </center>
 
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          
           <Button
             size="small"
             label="Загрузить файл"
