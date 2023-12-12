@@ -37,23 +37,28 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
     const operators = ["+", "-", "*", "/", "(", ")", ":="];
     const hexRegex = /0x[0-9a-fA-F]+/;
     const identifierRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
-
-    const expressions = input.split(";");
+     const expressions = input.split(";");
 
     let tokenNumber = 1;
 
     expressions.forEach((expression, expressionIndex) => {
       const withoutComments = expression.split("{")[0].trim(); // Убираем комментарии
-
       const elements = withoutComments.trim().split(/\s+/).filter(Boolean);
-
       elements.forEach((element) => {
         if (operators.includes(element)) {
-          tokens.push({
-            number: tokenNumber++,
-            lexeme: "Оператор",
-            value: element,
-          });
+          if (element === "(" || element === ")") {
+            tokens.push({
+              number: tokenNumber++,
+              lexeme: "Разделитель",
+              value: element,
+            });
+          } else {
+            tokens.push({
+              number: tokenNumber++,
+              lexeme: "Оператор",
+              value: element,
+            });
+          }
         } else if (hexRegex.test(element)) {
           tokens.push({
             number: tokenNumber++,
@@ -76,6 +81,17 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
             lexeme: `Ошибка в строке ${expressionIndex + 1}: ${element}`,
             value: element,
           });
+        }
+        const index = input.indexOf(element);
+        if (index !== -1 && index + element.length < input.length) {
+          const nextCharacter = input[index + element.length];
+          if (nextCharacter === ";") {
+            tokens.push({
+              number: tokenNumber++,
+              lexeme: "Разделитель",
+              value: nextCharacter,
+            });
+          }
         }
       });
     });
