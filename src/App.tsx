@@ -47,11 +47,19 @@ const LoopOperatorAnalyzer: React.FC = () => {
 
       words.forEach((word) => {
         if (operators.includes(word.toLowerCase())) {
-          tokens.push({
-            number: tokenNumber++,
-            lexeme: "Оператор цикла",
-            value: word,
-          });
+          if (word === "(" || word === ")") {
+            tokens.push({
+              number: tokenNumber++,
+              lexeme: "Разделитель",
+              value: word,
+            });
+          } else {
+            tokens.push({
+              number: tokenNumber++,
+              lexeme: "Оператор цикла",
+              value: word,
+            });
+          }
         } else if (constants.includes(word.toUpperCase())) {
           tokens.push({
             number: tokenNumber++,
@@ -71,6 +79,17 @@ const LoopOperatorAnalyzer: React.FC = () => {
             value: word,
           });
           setError((prev) => [...prev, `Ошибка в строке ${lineIndex + 1}: ${word}`]);
+        }
+        const index = input.indexOf(word);
+        if (index !== -1 && index + word.length < input.length) {
+          const nextCharacter = input[index + word.length];
+          if (nextCharacter === ";") {
+            tokens.push({
+              number: tokenNumber++,
+              lexeme: "Разделитель",
+              value: nextCharacter,
+            });
+          }
         }
       });
     });
@@ -95,7 +114,6 @@ const LoopOperatorAnalyzer: React.FC = () => {
 
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          
           <Button
             size="small"
             label="Загрузить файл"
