@@ -35,7 +35,7 @@ const LoopOperatorAnalyzer: React.FC = () => {
   ): { number: number; lexeme: string; value: string }[] {
     const tokens: { number: number; lexeme: string; value: string }[] = [];
     const operators = ["for", ";", "<", ">", "=", "do", "(", ")", ":="];
-    const constants = ["I", "II", "III", "IV", "V"];
+    const constants = ["|", "||", "|||", "|V", "V"];
     const identifierRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
 
     const lines = input.split(";");
