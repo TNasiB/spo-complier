@@ -43,7 +43,9 @@ const LoopOperatorAnalyzer: React.FC = () => {
     let tokenNumber = 1;
 
     lines.forEach((line, lineIndex) => {
-      const words = line.trim().split(/\s+/).filter(Boolean);
+      const withoutComments = line.split("{")[0].trim(); // Убираем комментарии
+
+      const words = withoutComments.trim().split(/\s+/).filter(Boolean);
 
       words.forEach((word) => {
         if (operators.includes(word.toLowerCase())) {
