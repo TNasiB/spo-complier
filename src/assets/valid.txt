@@ -3,7 +3,7 @@ if a > b then
     if x = y then;
         z := 123; {присваивание};
     else
-        z := MCMXC;
+        z := MCcMXC;
     if;
 else
     c := CCC;
