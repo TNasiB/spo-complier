@@ -39,6 +39,14 @@ const LogicalExpressionAnalyzer: React.FC = () => {
       const words = withoutComments.trim().split(/\s+/).filter(Boolean);
 
       words.forEach((word) => {
+        if (word === ":=") {
+          tokens.push({
+            number: tokenNumber++,
+            lexeme: "Знак присваивания",
+            type: "Assignment sign",
+            value: word,
+          });
+        }
         if (operators.includes(word.toLowerCase())) {
           if (word === "(" || word === ")") {
             tokens.push({
