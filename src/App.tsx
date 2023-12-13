@@ -104,7 +104,7 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
           tokens.push({
             number: tokenNumber++,
             type: "Comparison Operator",
-            lexeme: "Оператор сравнения",
+            lexeme: "Знак сравнения",
             value: word,
           });
         } else if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(word)) {
