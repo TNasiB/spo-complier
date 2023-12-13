@@ -183,10 +183,22 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
           </div>
         </Card>
         {error.length !== 0 && (
-          <Card title="Статус" style={{ display: "flex", justifyContent: "center" }}>
-            {error.map((elem) => {
-              return <Message key={elem} severity="error" text={error} />;
-            })}
+          <Card
+            title="Статус"
+            style={{ display: "flex", justifyContent: "center", gap: "10px" }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                gap: "10px",
+              }}
+            >
+              {error.map((elem) => {
+                return <Message key={elem} severity="error" text={elem} />;
+              })}
+            </div>
           </Card>
         )}
         {error.length === 0 && code !== "" && (
