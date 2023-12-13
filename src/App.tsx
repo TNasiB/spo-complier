@@ -51,6 +51,14 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
       const words = withoutComments.trim().split(/\s+/);
 
       words.forEach((word, wordIndex) => {
+        if (word === ":=") {
+          tokens.push({
+            number: tokenNumber++,
+            lexeme: "Знак присваивания",
+            type: "Assignment sign",
+            value: word,
+          });
+        }
         if (operators.includes(word)) {
           if (word === "(" || word === ")") {
             tokens.push({
