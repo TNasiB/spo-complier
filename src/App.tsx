@@ -48,7 +48,28 @@ const LoopOperatorAnalyzer: React.FC = () => {
       const words = withoutComments.trim().split(/\s+/).filter(Boolean);
 
       words.forEach((word) => {
-        if (word === ":=") {
+        const isRomanNumeral = /^[IXMLDC]+$/.test(word.toUpperCase());
+        const isIdentifier = /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(word);
+
+        if (isRomanNumeral) {
+          tokens.push({
+            number: tokenNumber++,
+            lexeme: "Римское число",
+            value: word,
+          });
+        } else if (isIdentifier) {
+          tokens.push({
+            number: tokenNumber++,
+            lexeme: "Идентификатор",
+            value: word,
+          });
+        } else if (word === ">" || word === "<") {
+          tokens.push({
+            number: tokenNumber++,
+            lexeme: "Знак сравнения",
+            value: word,
+          });
+        } else if (word === ":=") {
           tokens.push({
             number: tokenNumber++,
             lexeme: "Знак присваивания",

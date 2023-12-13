@@ -1,4 +1,3 @@
 for ( i := |; i < V; i := i + | )
-end
 for ( index := 1; index <= 10; index := index + 1 ) do
 
