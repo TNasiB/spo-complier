@@ -48,7 +48,10 @@ const LoopOperatorAnalyzer: React.FC = () => {
       const words = withoutComments.trim().split(/\s+/).filter(Boolean);
 
       words.forEach((word) => {
-        const isRomanNumeral = /^[IXMLDC]+$/.test(word.toUpperCase());
+        const isRomanNumeral =
+          /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/.test(
+            word.toUpperCase()
+          );
         const isIdentifier = /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(word);
 
         if (isRomanNumeral) {
