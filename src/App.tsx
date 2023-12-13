@@ -48,7 +48,13 @@ const LoopOperatorAnalyzer: React.FC = () => {
       const words = withoutComments.trim().split(/\s+/).filter(Boolean);
 
       words.forEach((word) => {
-        if (operators.includes(word.toLowerCase())) {
+        if (word === ":=") {
+          tokens.push({
+            number: tokenNumber++,
+            lexeme: "Знак присваивания",
+            value: word,
+          });
+        } else if (operators.includes(word.toLowerCase())) {
           tokens.push({
             number: tokenNumber++,
             lexeme: "Оператор цикла",
