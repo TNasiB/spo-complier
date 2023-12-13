@@ -1,3 +1,34 @@
 td {
   border: 1px solid #000;
 }
+
+.unicorn {
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(-45deg, #9ec3ff, #ff00ff);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  position: relative;
+  margin-top: 20px;
+}
+
+.unicorn::before {
+  content: "";
+  width: 50px;
+  height: 50px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 40px;
+  left: 30px;
+}
+
+.unicorn::after {
+  content: "";
+  width: 20px;
+  height: 80px;
+  background-color: #ffffff;
+  position: absolute;
+  top: 60px;
+  left: 70px;
+  transform: rotate(45deg);
+}

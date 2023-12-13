@@ -1,5 +1,6 @@
 x := 1;
 y := 0;
-z := (x and y) (x or y); 
+z := ( x and y ) ( x or y ); 
 p := 0 + 1;
+666;
 ::

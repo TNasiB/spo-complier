@@ -5,6 +5,7 @@ const LogicalExpressionAnalyzer: React.FC = () => {
     { number: number; type: string; lexeme: string; value: string }[]
   >([]);
   const [error, setError] = useState<string>("");
+  const [content, setContent] = useState("");
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
@@ -15,6 +16,7 @@ const LogicalExpressionAnalyzer: React.FC = () => {
         if (e.target && e.target.result) {
           const content = e.target.result as string;
           const lexemes = lexicalAnalysis(content);
+          setContent(content);
           setTokens(lexemes);
         }
       };
@@ -118,27 +120,54 @@ const LogicalExpressionAnalyzer: React.FC = () => {
   }
 
   return (
-    <div>
-      <input type="file" onChange={handleFileUpload} />
-      {error && <p>{error}</p>}
-      <table>
-        <thead>
-          <tr>
-            <th>№ лексемы</th>
-            <th>Лексема</th>
-            <th>Значение</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tokens.map((token) => (
-            <tr key={token.number}>
-              <td>{token.number}</td>
-              <td>{token.lexeme}</td>
-              <td>{token.value}</td>
+    <div
+      style={{
+        fontFamily: "Arial, sans-serif",
+        padding: "20px",
+        backgroundColor: "pink",
+      }}
+    >
+      <input type="file" onChange={handleFileUpload} style={{ marginBottom: "20px" }} />
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div style={{ display: "flex", gap: 20 }}>
+        <table
+          style={{
+            borderCollapse: "collapse",
+            backgroundColor: "white",
+            padding: "10px",
+          }}
+        >
+          <thead>
+            <tr>
+              <th style={{ border: "1px solid black", padding: "8px" }}>№ лексемы</th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>Лексема</th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>Значение</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {tokens.map((token) => (
+              <tr key={token.number}>
+                <td style={{ border: "1px solid black", padding: "8px" }}>
+                  {token.number}
+                </td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>
+                  {token.lexeme}
+                </td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>
+                  {token.value}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <textarea
+          value={content}
+          cols={30}
+          rows={10}
+          style={{ resize: "none", border: "1px solid black", padding: "8px" }}
+        />
+      </div>
+      <div className="unicorn"></div>
     </div>
   );
 };
