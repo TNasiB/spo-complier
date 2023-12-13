@@ -1,2 +1,2 @@
 for ( || := |; || < V; || := || > | ) do
-for ( || := |; || < CcC; index := || > | ) do
+for ( || := |; || < CC; index := || > | ) do
