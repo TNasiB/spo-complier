@@ -140,12 +140,14 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
           });
         }
         const index = input.indexOf(word);
-        if (index !== -1 && index + word.length < input.length) {
-          const nextCharacter = input[index + word.length];
+        const inputWithout = input.replace(/ ?\{[^}]*\}/g, "");
+        if (index !== -1 && index + word.length < inputWithout.length) {
+          console.log(inputWithout[index]);
+          const nextCharacter = inputWithout[index + word.length];
           if (nextCharacter === ";") {
             tokens.push({
-              number: tokenNumber++,
               type: "Splitter",
+              number: tokenNumber++,
               lexeme: "Разделитель",
               value: nextCharacter,
             });
