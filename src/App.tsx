@@ -34,8 +34,8 @@ const LoopOperatorAnalyzer: React.FC = () => {
     input: string
   ): { number: number; lexeme: string; value: string }[] {
     const tokens: { number: number; lexeme: string; value: string }[] = [];
-    const operators = ["for", ";", "<", ">", "=", "do", "(", ")", ":="];
-    const constants = ["|", "||", "|||", "|V", "V"];
+    const operators = [";", "<", ">", "=", "(", ")", ":="];
+    const loopOperators = ["for", "do"];
     const identifierRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
 
     const lines = input.split(";");
@@ -53,8 +53,13 @@ const LoopOperatorAnalyzer: React.FC = () => {
             word
           );
         const isIdentifier = /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(word);
-
-        if (isRomanNumeral) {
+        if (loopOperators.includes(word)) {
+          tokens.push({
+            number: tokenNumber++,
+            lexeme: "Оператор цикла",
+            value: word,
+          });
+        } else if (isRomanNumeral) {
           tokens.push({
             number: tokenNumber++,
             lexeme: "Римское число",
@@ -78,7 +83,7 @@ const LoopOperatorAnalyzer: React.FC = () => {
             lexeme: "Знак присваивания",
             value: word,
           });
-        } else if (operators.includes(word.toLowerCase())) {
+        } else if (operators.includes(word)) {
           if (word === "(" || word === ")") {
             tokens.push({
               number: tokenNumber++,
@@ -92,12 +97,6 @@ const LoopOperatorAnalyzer: React.FC = () => {
               value: word,
             });
           }
-        } else if (constants.includes(word.toUpperCase())) {
-          tokens.push({
-            number: tokenNumber++,
-            lexeme: "Римское число",
-            value: word,
-          });
         } else if (identifierRegex.test(word)) {
           tokens.push({
             number: tokenNumber++,
