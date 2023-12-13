@@ -40,7 +40,13 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
       const elements = withoutComments.trim().split(/\s+/).filter(Boolean);
 
       elements.forEach((element) => {
-        if (operators.includes(element)) {
+        if (element === ":=") {
+          tokens.push({
+            number: tokenNumber++,
+            lexeme: "Знак присваивания",
+            value: element,
+          });
+        } else if (operators.includes(element)) {
           tokens.push({
             number: tokenNumber++,
             lexeme: "Оператор",
