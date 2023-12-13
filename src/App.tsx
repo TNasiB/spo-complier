@@ -35,7 +35,7 @@ const LoopOperatorAnalyzer: React.FC = () => {
   ): { number: number; lexeme: string; value: string }[] {
     const tokens: { number: number; lexeme: string; value: string }[] = [];
     const operators = ["for", ";", "<", ">", "=", "do", "(", ")", ":="];
-    const constants = ["I", "II", "III", "IV", "V"];
+    const constants = ["|", "||", "|||", "|V", "V"];
     const identifierRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
 
     const lines = input.split(";");
@@ -55,11 +55,19 @@ const LoopOperatorAnalyzer: React.FC = () => {
             value: word,
           });
         } else if (operators.includes(word.toLowerCase())) {
-          tokens.push({
-            number: tokenNumber++,
-            lexeme: "Оператор цикла",
-            value: word,
-          });
+          if (word === "(" || word === ")") {
+            tokens.push({
+              number: tokenNumber++,
+              lexeme: "Разделитель",
+              value: word,
+            });
+          } else {
+            tokens.push({
+              number: tokenNumber++,
+              lexeme: "Оператор цикла",
+              value: word,
+            });
+          }
         } else if (constants.includes(word.toUpperCase())) {
           tokens.push({
             number: tokenNumber++,
@@ -79,6 +87,17 @@ const LoopOperatorAnalyzer: React.FC = () => {
             value: word,
           });
           setError((prev) => [...prev, `Ошибка в строке ${lineIndex + 1}: ${word}`]);
+        }
+        const index = input.indexOf(word);
+        if (index !== -1 && index + word.length < input.length) {
+          const nextCharacter = input[index + word.length];
+          if (nextCharacter === ";") {
+            tokens.push({
+              number: tokenNumber++,
+              lexeme: "Разделитель",
+              value: nextCharacter,
+            });
+          }
         }
       });
     });

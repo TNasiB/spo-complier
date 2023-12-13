@@ -1,4 +1,4 @@
-for ( II := I; II < V; II := II > I ) do
+for ( || := |; || < V; || := || > | ) do
 end;
-for ( II := I; II < V; index := II > I ) do
+for ( || := |; || < V; index := || > | ) do
 end;
