@@ -1,7 +1,7 @@
 if a > b then
     c := IV;
     if x = y then;
-        z := 123; {присваивание};
+        z := V {присваивание};
     else
         z := MCMXC;
     if;

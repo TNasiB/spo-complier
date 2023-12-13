@@ -1,11 +1,12 @@
 if a > b then
-    c := IV;
-    if x = y then
-        z := 123;
+    c := IVH;
+    if x = y then;
+        z := 4 {присваивание};
+    if a>=6 then;
+        c := 4 {присваивание};
     else
         z := MCMXC;
-    end if; µ
+    if;
 else
-    c := CCC
-    d123 := 5; 
-end if;
+    c := ccc;
+if
