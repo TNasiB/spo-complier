@@ -62,11 +62,16 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
             lexeme: `Ошибка в строке ${lineIndex + 1}, слово ${wordIndex + 1}`,
             value: word,
           });
-        } else if (/^\d+$/.test(word) || /^[IVXLCDM]+$/.test(word)) {
+        } else if (
+          /^\d+$/.test(word) ||
+          /^(M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})|I{1,3}|IV|IX|V|VI{0,3}|X{1,3})$/i.test(
+            word
+          )
+        ) {
           tokens.push({
             number: tokenNumber++,
             type: "Roman numeral",
-            lexeme: "Рримская цифра",
+            lexeme: "Римская цифра",
             value: word,
           });
         } else if (word === ":=") {
@@ -76,8 +81,7 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
             type: "Assignment sign",
             value: word,
           });
-        }
-        if (operators.includes(word)) {
+        } else if (operators.includes(word)) {
           if (word === "(" || word === ")") {
             tokens.push({
               number: tokenNumber++,
