@@ -89,8 +89,10 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
           });
         }
         const index = input.indexOf(element);
-        if (index !== -1 && index + element.length < input.length) {
-          const nextCharacter = input[index + element.length];
+        const inputWithout = input.replace(/ ?\{[^}]*\}/g, "");
+        if (index !== -1 && index + element.length < inputWithout.length) {
+          console.log(inputWithout[index]);
+          const nextCharacter = inputWithout[index + element.length];
           if (nextCharacter === ";") {
             tokens.push({
               number: tokenNumber++,
