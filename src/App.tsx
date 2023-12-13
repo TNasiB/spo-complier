@@ -51,7 +51,25 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
       const words = withoutComments.trim().split(/\s+/);
 
       words.forEach((word, wordIndex) => {
-        if (word === ":=") {
+        if (!Number.isNaN(Number(word))) {
+          setError((prev) => [
+            ...prev,
+            `Ошибка в строке ${lineIndex + 1}, слово ${wordIndex + 1}`,
+          ]);
+          tokens.push({
+            number: tokenNumber++,
+            type: "Error",
+            lexeme: `Ошибка в строке ${lineIndex + 1}, слово ${wordIndex + 1}`,
+            value: word,
+          });
+        } else if (/^\d+$/.test(word) || /^[IVXLCDM]+$/.test(word)) {
+          tokens.push({
+            number: tokenNumber++,
+            type: "Roman numeral",
+            lexeme: "Рримская цифра",
+            value: word,
+          });
+        } else if (word === ":=") {
           tokens.push({
             number: tokenNumber++,
             lexeme: "Знак присваивания",
