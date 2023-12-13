@@ -1,10 +1,17 @@
 import React, { useState } from "react";
+import { Input, Table } from "antd";
+import Column from "antd/es/table/Column";
+import "./global.scss";
+import { Alert } from "antd";
+
+const { TextArea } = Input;
 
 const ArithmeticExpressionAnalyzer: React.FC = () => {
   const [tokens, setTokens] = useState<
     { number: number; lexeme: string; value: string }[]
   >([]);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string[]>([]);
+  const [code, setCode] = useState("");
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
@@ -14,6 +21,7 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
       reader.onload = (e) => {
         if (e.target && e.target.result) {
           const content = e.target.result as string;
+          setCode(content);
           const lexemes = lexicalAnalysis(content);
           setTokens(lexemes);
         }
@@ -29,16 +37,13 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
     const operators = ["+", "-", "*", "/", "(", ")", ":="];
     const hexRegex = /0x[0-9a-fA-F]+/;
     const identifierRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
-
     const expressions = input.split(";");
 
     let tokenNumber = 1;
 
     expressions.forEach((expression, expressionIndex) => {
       const withoutComments = expression.split("{")[0].trim(); // Убираем комментарии
-
       const elements = withoutComments.trim().split(/\s+/).filter(Boolean);
-
       elements.forEach((element) => {
         if (element === ":=") {
           tokens.push({
@@ -47,11 +52,19 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
             value: element,
           });
         } else if (operators.includes(element)) {
-          tokens.push({
-            number: tokenNumber++,
-            lexeme: "Оператор",
-            value: element,
-          });
+          if (element === "(" || element === ")") {
+            tokens.push({
+              number: tokenNumber++,
+              lexeme: "Разделитель",
+              value: element,
+            });
+          } else {
+            tokens.push({
+              number: tokenNumber++,
+              lexeme: "Оператор",
+              value: element,
+            });
+          }
         } else if (hexRegex.test(element)) {
           tokens.push({
             number: tokenNumber++,
@@ -65,11 +78,26 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
             value: element,
           });
         } else {
+          setError((prev) => [
+            ...prev,
+            `Ошибка в строке ${expressionIndex + 1}: ${element}`,
+          ]);
           tokens.push({
             number: tokenNumber++,
             lexeme: `Ошибка в строке ${expressionIndex + 1}: ${element}`,
             value: element,
           });
+        }
+        const index = input.indexOf(element);
+        if (index !== -1 && index + element.length < input.length) {
+          const nextCharacter = input[index + element.length];
+          if (nextCharacter === ";") {
+            tokens.push({
+              number: tokenNumber++,
+              lexeme: "Разделитель",
+              value: nextCharacter,
+            });
+          }
         }
       });
     });
@@ -79,26 +107,36 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
 
   return (
     <div>
-      <input type="file" onChange={handleFileUpload} />
-      {error && <p>{error}</p>}
-      <table>
-        <thead>
-          <tr>
-            <th>№ лексемы</th>
-            <th>Лексема</th>
-            <th>Значение</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tokens.map((token) => (
-            <tr key={token.number}>
-              <td>{token.number}</td>
-              <td>{token.lexeme}</td>
-              <td>{token.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <center>
+        <h2>Штурмина В.А. ИВТ-424 ЛБ2</h2>
+      </center>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+          <Input type="file" onChange={handleFileUpload} />
+
+          <TextArea
+            placeholder="Код "
+            name=""
+            id=""
+            cols={30}
+            rows={10}
+            value={code}
+          ></TextArea>
+
+          {error &&
+            error.map((elem) => {
+              return <Alert key={elem} message={elem} type="error" showIcon />;
+            })}
+          {code !== "" && error.length === 0 && (
+            <Alert message={"Успешно"} type="success" showIcon />
+          )}
+        </div>
+        <Table dataSource={tokens} style={{ width: "50%" }} pagination={false}>
+          <Column title="Индекс" dataIndex="number" key="address" />
+          <Column title="Тип" dataIndex="lexeme" key="address" />
+          <Column title="Значение" dataIndex="value" key="address" />
+        </Table>
+      </div>
     </div>
   );
 };
