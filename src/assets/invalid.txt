@@ -1,11 +1,11 @@
-if a > b then
+if a > b the
     c := IVH;
     if x = y then;
         z := 4 {присваивание};
     if a>=6 then;
         c := 4 {присваивание};
     else
-        z := MCMXC;
+        z := ++MCMXC;
     if;
 else
     c := CcC;
