@@ -35,7 +35,7 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
   ): { number: number; lexeme: string; value: string }[] {
     const tokens: { number: number; lexeme: string; value: string }[] = [];
     const operators = ["+", "-", "*", "/", "(", ")", ":="];
-    const hexRegex = /0x[0-9a-fA-F]+/;
+    const hexRegex = /^0x([0-9a-fA-F]+)$/;
     const identifierRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
     const expressions = input.split(";");
 
