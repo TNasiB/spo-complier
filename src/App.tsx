@@ -64,7 +64,7 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
           });
         } else if (
           /^\d+$/.test(word) ||
-          /^(M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})|I{1,3}|IV|IX|V|VI{0,3}|X{1,3})$/i.test(
+          /^(M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})|I{1,3}|IV|IX|V|VI{0,3}|X{1,3})$/.test(
             word
           )
         ) {

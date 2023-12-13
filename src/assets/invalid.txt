@@ -8,5 +8,5 @@ if a > b then
         z := MCMXC;
     if;
 else
-    c := ccc;
+    c := CcC;
 if
