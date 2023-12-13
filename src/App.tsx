@@ -34,16 +34,16 @@ const LoopOperatorAnalyzer: React.FC = () => {
     input: string
   ): { number: number; lexeme: string; value: string }[] {
     const tokens: { number: number; lexeme: string; value: string }[] = [];
-    const operators = [";", "<", ">", "=", "(", ")", ":="];
+    const operators = ["<", ">", "=", "(", ")", ":="];
     const loopOperators = ["for", "do"];
     const identifierRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
 
-    const lines = input.split(";");
+    const lines = input.split("\n"); // Разбиваем на строки
 
     let tokenNumber = 1;
 
     lines.forEach((line, lineIndex) => {
-      const withoutComments = line.split("{")[0].trim(); // Убираем комментарии
+      const withoutComments = line.split("{")[0].trim();
 
       const words = withoutComments.trim().split(/\s+/).filter(Boolean);
 
@@ -53,6 +53,7 @@ const LoopOperatorAnalyzer: React.FC = () => {
             word
           );
         const isIdentifier = /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(word);
+
         if (loopOperators.includes(word)) {
           tokens.push({
             number: tokenNumber++,
@@ -103,6 +104,13 @@ const LoopOperatorAnalyzer: React.FC = () => {
             lexeme: "Идентификатор",
             value: word,
           });
+        } else if (word === ";") {
+          // Обрабатываем точку с запятой как отдельную лексему
+          tokens.push({
+            number: tokenNumber++,
+            lexeme: "Разделитель",
+            value: word,
+          });
         } else {
           tokens.push({
             number: tokenNumber++,
@@ -110,17 +118,6 @@ const LoopOperatorAnalyzer: React.FC = () => {
             value: word,
           });
           setError((prev) => [...prev, `Ошибка в строке ${lineIndex + 1}: ${word}`]);
-        }
-        const index = input.indexOf(word);
-        if (index !== -1 && index + word.length < input.length) {
-          const nextCharacter = input[index + word.length];
-          if (nextCharacter === ";") {
-            tokens.push({
-              number: tokenNumber++,
-              lexeme: "Разделитель",
-              value: nextCharacter,
-            });
-          }
         }
       });
     });
