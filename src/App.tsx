@@ -52,12 +52,21 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
 
       words.forEach((word, wordIndex) => {
         if (operators.includes(word)) {
-          tokens.push({
-            number: tokenNumber++,
-            type: "Operator",
-            lexeme: "Знак операции",
-            value: word,
-          });
+          if (word === "(" || word === ")") {
+            tokens.push({
+              number: tokenNumber++,
+              type: "Splitter",
+              lexeme: "Разделитель",
+              value: word,
+            });
+          } else {
+            tokens.push({
+              number: tokenNumber++,
+              type: "Operator",
+              lexeme: "Знак операции",
+              value: word,
+            });
+          }
         } else if (keywords.includes(word)) {
           tokens.push({
             number: tokenNumber++,
@@ -99,6 +108,18 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
             lexeme: `Ошибка в строке ${lineIndex + 1}, слово ${wordIndex + 1}`,
             value: word,
           });
+        }
+        const index = input.indexOf(word);
+        if (index !== -1 && index + word.length < input.length) {
+          const nextCharacter = input[index + word.length];
+          if (nextCharacter === ";") {
+            tokens.push({
+              number: tokenNumber++,
+              type: "Splitter",
+              lexeme: "Разделитель",
+              value: nextCharacter,
+            });
+          }
         }
       });
     });
