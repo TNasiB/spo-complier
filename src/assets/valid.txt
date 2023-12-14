@@ -1,2 +1,2 @@
-for ( II := I ; II < V ; II := b > I ) do
+for ( II := I ; II < V ; II := b > I ) do {комментарий}
 for ( II := I ; II < CC ; index := II > I ) do

@@ -41,8 +41,19 @@ const LoopOperatorAnalyzer: React.FC = () => {
     const lines = input.split("\n"); // Разбиваем на строки
 
     let tokenNumber = 1;
+    let braceCount = 0;
 
     lines.forEach((line, lineIndex) => {
+      braceCount += line.split("{").length - 1;
+      braceCount -= line.split("}").length - 1;
+
+      console.log({ braceCount });
+
+      if (braceCount < 0 || braceCount % 2 === 1) {
+        setError((prev) => [...prev, `Незакрытый комментарий в строке ${lineIndex + 1}`]);
+        braceCount = 0; // Сбрасываем счетчик при обнаружении ошибки
+      }
+
       const withoutComments = line.split("{")[0].trim();
 
       const words = withoutComments.trim().split(/\s+/).filter(Boolean);
