@@ -34,11 +34,25 @@ const LogicalExpressionAnalyzer: React.FC = () => {
     const lines = input.split(";");
 
     let tokenNumber = 1;
+    let braceCount = 0;
 
     lines.forEach((line, lineIndex) => {
       const withoutComments = line.split("{")[0].trim();
 
       const words = withoutComments.trim().split(/\s+/).filter(Boolean);
+
+      braceCount += line.split("{").length - 1;
+      braceCount -= line.split("}").length - 1;
+
+      if (braceCount < 0 || braceCount % 2 === 1) {
+        tokens.push({
+          number: tokenNumber++,
+          type: "Error",
+          lexeme: `Ошибка! Незакрытый комментарий в строке ${lineIndex + 1}`,
+          value: "Коммент",
+        });
+        braceCount = 0;
+      }
 
       words.forEach((word) => {
         if (word === ":=") {
