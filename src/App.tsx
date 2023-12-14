@@ -27,7 +27,13 @@ const LogicalExpressionAnalyzer: React.FC = () => {
   function lexicalAnalysis(
     input: string
   ): { number: number; type: string; lexeme: string; value: string }[] {
-    const tokens: { number: number; type: string; lexeme: string; value: string }[] = [];
+    const tokens: {
+      number: number;
+      type: string;
+      lexeme: string;
+      value: string;
+      position?: number;
+    }[] = [];
     const operators = ["or", "and", "xor", "not", "(", ")", ":="];
     const constants = ["0", "1"];
 
@@ -108,10 +114,13 @@ const LogicalExpressionAnalyzer: React.FC = () => {
             value: word,
           });
         } else {
+          const wordPosition = line.indexOf(word) + 1;
           tokens.push({
             number: tokenNumber++,
             type: "Error",
-            lexeme: `Ошибка в строке ${lineIndex + 1}, слово: ${word}`,
+            lexeme: `Ошибка в строке ${
+              lineIndex + 1
+            }, слово: ${word}  в позиции ${wordPosition}`,
             value: word,
           });
         }
@@ -160,7 +169,10 @@ const LogicalExpressionAnalyzer: React.FC = () => {
           </thead>
           <tbody>
             {tokens.map((token) => (
-              <tr key={token.number}>
+              <tr
+                key={token.number}
+                style={{ background: token.type === "Error" ? "red" : "transparent" }}
+              >
                 <td style={{ border: "1px solid black", padding: "8px" }}>
                   {token.number}
                 </td>
