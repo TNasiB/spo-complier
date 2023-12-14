@@ -118,6 +118,7 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
             lexeme: "Идентификатор",
             value: word,
           });
+          // eslint-disable-next-line no-dupe-else-if
         } else if (/^\d+$/.test(word)) {
           tokens.push({
             number: tokenNumber++,
@@ -142,8 +143,8 @@ const ConditionalOperatorAnalyzer: React.FC = () => {
         const index = input.indexOf(word);
         const inputWithout = input.replace(/ ?\{[^}]*\}/g, "");
         if (index !== -1 && index + word.length < inputWithout.length) {
-          console.log(inputWithout[index]);
           const nextCharacter = inputWithout[index + word.length];
+          
           if (nextCharacter === ";") {
             tokens.push({
               type: "Splitter",
