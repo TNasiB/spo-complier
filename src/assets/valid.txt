@@ -1,6 +1,6 @@
 if a > b then
     c := IV;
-    if x = y then;
+    if x = y then
         z := V {присваивание};
     else
         z := CcC;
