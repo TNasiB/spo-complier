@@ -40,8 +40,19 @@ const ArithmeticExpressionAnalyzer: React.FC = () => {
     const expressions = input.split(";");
 
     let tokenNumber = 1;
+    let braceCount = 0;
 
     expressions.forEach((expression, expressionIndex) => {
+      braceCount += expression.split("{").length - 1;
+      braceCount -= expression.split("}").length - 1;
+
+      if (braceCount < 0 || braceCount % 2 === 1) {
+        setError((prev) => [
+          ...prev,
+          `Незакрытый комментарий в строке ${expressionIndex + 1}`,
+        ]);
+        braceCount = 0; // Сбрасываем счетчик при обнаружении ошибки
+      }
       const withoutComments = expression.split("{")[0].trim(); // Убираем комментарии
       const elements = withoutComments.trim().split(/\s+/).filter(Boolean);
       elements.forEach((element) => {
