@@ -1,2 +1,2 @@
-x := 0x1 + y * ( z - 0xABC );
+x := 0x1 + y * ( z - 0xABC ) {gg};
 a := b / ( c + d );
