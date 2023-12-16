@@ -4,7 +4,7 @@ const LogicalExpressionAnalyzer: React.FC = () => {
   const [tokens, setTokens] = useState<
     { number: number; type: string; lexeme: string; value: string }[]
   >([]);
-  const [error, setError] = useState<string>("");
+
   const [content, setContent] = useState("");
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,6 +16,8 @@ const LogicalExpressionAnalyzer: React.FC = () => {
         if (e.target && e.target.result) {
           const content = e.target.result as string;
           const lexemes = lexicalAnalysis(content);
+          const result = performSyntaxAnalysis(lexemes);
+          console.log({ result });
           setContent(content);
           setTokens(lexemes);
         }
@@ -142,6 +144,62 @@ const LogicalExpressionAnalyzer: React.FC = () => {
     return tokens;
   }
 
+  type GrammarRules = { [key: string]: string[][] };
+
+  function performSyntaxAnalysis(grammarRules: GrammarRules, tokens: string[]): string {
+    const shiftReduce = (grammarRules: GrammarRules, inputTokens: string[]): string => {
+      const stack: { symbol: string; isTerminal: boolean }[] = [];
+      const input = [...inputTokens]; // Копируем входной массив токенов
+
+      const isTerminal = (symbol: string): boolean => {
+        return !Object.keys(grammarRules).includes(symbol);
+      };
+
+      while (input.length > 0 || stack.length > 1) {
+        const currentSymbol = input[0];
+        const topStack = stack[stack.length - 1];
+
+        if (!topStack || topStack.isTerminal || !grammarRules[topStack.symbol]) {
+          // Сдвиг, если на вершине стека терминал или нет правил для текущего символа
+          stack.push({ symbol: currentSymbol, isTerminal: isTerminal(currentSymbol) });
+          input.shift(); // Сдвигаем входной массив токенов
+        } else {
+          const rule = grammarRules[topStack.symbol].find((r) => {
+            const rightSymbols = r.split(" ");
+            return (
+              rightSymbols.join("") ===
+              stack
+                .slice(-rightSymbols.length)
+                .map((item) => item.symbol)
+                .join("")
+            );
+          });
+
+          if (rule) {
+            // Свертка
+            const rightSymbols = rule.split(" ");
+            stack.splice(-rightSymbols.length);
+            stack.push({
+              symbol: rule.split(" ")[0],
+              isTerminal: isTerminal(rule.split(" ")[0]),
+            });
+          } else {
+            // Не найдено правило для свертки
+            return "Ошибка: Не найдено правило для свертки";
+          }
+        }
+      }
+
+      return "Входная строка успешно разобрана";
+    };
+
+    return shiftReduce(grammarRules, tokens);
+  }
+
+  // const isTerminal = (symbol) => {
+  //   return !Object.keys(grammarRules).includes(symbol);
+  // };
+
   return (
     <div
       style={{
@@ -151,7 +209,7 @@ const LogicalExpressionAnalyzer: React.FC = () => {
       }}
     >
       <input type="file" onChange={handleFileUpload} style={{ marginBottom: "20px" }} />
-      {error && <p style={{ color: "red" }}>{error}</p>}
+
       <div style={{ display: "flex", gap: 20 }}>
         <table
           style={{
@@ -193,7 +251,6 @@ const LogicalExpressionAnalyzer: React.FC = () => {
           style={{ resize: "none", border: "1px solid black", padding: "8px" }}
         />
       </div>
-      <div className="unicorn"></div>
     </div>
   );
 };

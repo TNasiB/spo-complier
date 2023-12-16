@@ -1,4 +1,4 @@
-a := 1;
-b := 0;
-c := a or b; { комментарий }
-d := ( a and b ) xor ( not a );
+a := 11 ;
+b : 12.30 ;
+c = a or b ; { комментарий };
+1d := ( a and b2 ) xor ( not a ) ;
