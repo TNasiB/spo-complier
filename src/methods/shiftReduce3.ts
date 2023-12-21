@@ -170,7 +170,7 @@ export class ShiftReduce3 {
         const precedence = precedenceMatrix[current.value][next.value];
 
         if (next.value !== ";" && precedence === PrecedenceEnum.Empty) {
-          throw new Error(`Ошибка в строке ${i + 1} символ ${j + 1}`);
+          console.error(`Ошибка в строке ${i + 1} символ ${j + 1}`);
         }
       }
     }
@@ -178,7 +178,7 @@ export class ShiftReduce3 {
 
   parseLine(tokens: Lexem[]): Lexem[] {
     // Эта фунция обрабатывает строку и должна вернуть массив [{value: E}], иначе ошибка
-    debugger;
+    // debugger;
     const tokensCopy = [...tokens];
     // Делаем копию массива строки
     const reversedGrammarRules = grammarRules.slice().reverse();
@@ -189,11 +189,15 @@ export class ShiftReduce3 {
     // Цикл, который должен завершится, когда массив токенов исчерпнет
     let tokenIndex = 0;
 
+    let successReduce = false;
+
     while (!success) {
       //Цикл по массиву грамматических правил
+      successReduce = false;
 
       for (let ruleIndex = 0; ruleIndex < reversedGrammarRules.length; ruleIndex++) {
         const currentRule = reversedGrammarRules[ruleIndex];
+
         const tokenOtrezok = [tokenIndex, currentRule.length + tokenIndex];
 
         // Беру часть строки, которая сооветствует длине правила и вытаскиваю оттуда только value
@@ -213,18 +217,25 @@ export class ShiftReduce3 {
         }
 
         // Если наш счетчик успешкного сравнения равен длине массива правила, то выполняем логику замены последовательности символом на нетерминал
-        if (successCount === currentRule.length) {
+        const isERule = currentRule[0] === "E" && currentRule.length === 1;
+        if (successCount === currentRule.length && !isERule) {
           tokensCopy.splice(tokenOtrezok[0], currentRule.length, {
             number: -1,
             type: "NonTerm",
             value: "E",
           });
 
+          tokenIndex = 0;
+          successReduce = true;
+
           break;
         }
       }
 
-      tokenIndex++;
+      if (!successReduce) {
+        tokenIndex++;
+      }
+
       if (tokenIndex === tokensCopy.length) {
         tokenIndex = 0;
       }
