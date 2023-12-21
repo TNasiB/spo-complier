@@ -1,4 +1,10 @@
-a := 1;
-b := 0;
-c := a or b;
-d := ( a and b2 ) xor not ( a );
+if a > b then
+    c := IV;
+    if x = y then
+        z := V {присваивание};
+    else
+        z := CcC;
+    if;
+else
+    c := CCC;
+if

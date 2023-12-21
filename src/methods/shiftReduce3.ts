@@ -1,128 +1,6 @@
 import { grammarRules } from "../grammarRules";
-import { Lexem, Precedence, PrecedenceEnum } from "./../types";
-
-const precedenceMatrix: { [key: string]: { [key: string]: Precedence } } = {
-  a: {
-    a: PrecedenceEnum.Empty,
-    ":=": PrecedenceEnum.Equal,
-    ";": PrecedenceEnum.Empty,
-    or: PrecedenceEnum.Greater,
-    xor: PrecedenceEnum.Greater,
-    and: PrecedenceEnum.Greater,
-    not: PrecedenceEnum.Empty,
-    "(": PrecedenceEnum.Empty,
-    ")": PrecedenceEnum.Greater,
-    E1: PrecedenceEnum.Empty,
-  },
-  ":=": {
-    a: PrecedenceEnum.Less,
-    ":=": PrecedenceEnum.Empty,
-    ";": PrecedenceEnum.Equal,
-    or: PrecedenceEnum.Less,
-    xor: PrecedenceEnum.Less,
-    and: PrecedenceEnum.Less,
-    not: PrecedenceEnum.Less,
-    "(": PrecedenceEnum.Less,
-    ")": PrecedenceEnum.Empty,
-    E: PrecedenceEnum.Greater,
-  },
-  ";": {
-    a: PrecedenceEnum.Empty,
-    ":=": PrecedenceEnum.Empty,
-    ";": PrecedenceEnum.Empty,
-    or: PrecedenceEnum.Empty,
-    xor: PrecedenceEnum.Empty,
-    and: PrecedenceEnum.Empty,
-    not: PrecedenceEnum.Empty,
-    "(": PrecedenceEnum.Empty,
-    ")": PrecedenceEnum.Empty,
-    E: PrecedenceEnum.Greater,
-  },
-  or: {
-    a: PrecedenceEnum.Less,
-    ":=": PrecedenceEnum.Empty,
-    ";": PrecedenceEnum.Empty,
-    or: PrecedenceEnum.Greater,
-    xor: PrecedenceEnum.Greater,
-    and: PrecedenceEnum.Less,
-    not: PrecedenceEnum.Less,
-    "(": PrecedenceEnum.Less,
-    ")": PrecedenceEnum.Greater,
-    E: PrecedenceEnum.Empty,
-  },
-  xor: {
-    a: PrecedenceEnum.Less,
-    ":=": PrecedenceEnum.Empty,
-    ";": PrecedenceEnum.Empty,
-    or: PrecedenceEnum.Greater,
-    xor: PrecedenceEnum.Greater,
-    and: PrecedenceEnum.Less,
-    not: PrecedenceEnum.Less,
-    "(": PrecedenceEnum.Less,
-    ")": PrecedenceEnum.Greater,
-    E: PrecedenceEnum.Empty,
-  },
-  and: {
-    a: PrecedenceEnum.Less,
-    ":=": PrecedenceEnum.Empty,
-    ";": PrecedenceEnum.Empty,
-    or: PrecedenceEnum.Greater,
-    xor: PrecedenceEnum.Greater,
-    and: PrecedenceEnum.Greater,
-    not: PrecedenceEnum.Less,
-    "(": PrecedenceEnum.Less,
-    ")": PrecedenceEnum.Greater,
-    E: PrecedenceEnum.Empty,
-  },
-  not: {
-    a: PrecedenceEnum.Empty,
-    ":=": PrecedenceEnum.Empty,
-    ";": PrecedenceEnum.Empty,
-    or: PrecedenceEnum.Empty,
-    xor: PrecedenceEnum.Empty,
-    and: PrecedenceEnum.Empty,
-    not: PrecedenceEnum.Empty,
-    "(": PrecedenceEnum.Equal,
-    ")": PrecedenceEnum.Empty,
-    E: PrecedenceEnum.Empty,
-  },
-  "(": {
-    a: PrecedenceEnum.Less,
-    ":=": PrecedenceEnum.Empty,
-    ";": PrecedenceEnum.Empty,
-    or: PrecedenceEnum.Less,
-    xor: PrecedenceEnum.Less,
-    and: PrecedenceEnum.Less,
-    not: PrecedenceEnum.Less,
-    "(": PrecedenceEnum.Less,
-    ")": PrecedenceEnum.Equal,
-    E: PrecedenceEnum.Empty,
-  },
-  ")": {
-    a: PrecedenceEnum.Empty,
-    ":=": PrecedenceEnum.Empty,
-    ";": PrecedenceEnum.Empty,
-    or: PrecedenceEnum.Greater,
-    xor: PrecedenceEnum.Greater,
-    and: PrecedenceEnum.Greater,
-    not: PrecedenceEnum.Empty,
-    "(": PrecedenceEnum.Empty,
-    ")": PrecedenceEnum.Greater,
-    E: PrecedenceEnum.Empty,
-  },
-  E: {
-    a: PrecedenceEnum.Less,
-    ":=": PrecedenceEnum.Less,
-    ";": PrecedenceEnum.Empty,
-    or: PrecedenceEnum.Empty,
-    xor: PrecedenceEnum.Empty,
-    and: PrecedenceEnum.Empty,
-    not: PrecedenceEnum.Empty,
-    "(": PrecedenceEnum.Empty,
-    ")": PrecedenceEnum.Empty,
-    E: PrecedenceEnum.Empty,
-  },
-};
+import { precedenceMatrix } from "../matrix";
+import { Lexem, PrecedenceEnum } from "./../types";
 
 const prepareTokensForShiftReduce = (lexems: Lexem[]): Lexem[][] => {
   const toASymbols: Lexem[] = lexems.map((lexem) => ({
@@ -167,10 +45,12 @@ export class ShiftReduce3 {
         const next = this.tokens[i][j + 1];
 
         if (!next) continue;
+
+        console.log(current.value, next.value);
         const precedence = precedenceMatrix[current.value][next.value];
 
         if (next.value !== ";" && precedence === PrecedenceEnum.Empty) {
-          console.error(`Ошибка в строке ${i + 1} символ ${j + 1}`);
+          // console.error(`Ошибка в строке ${i + 1} символ ${j + 1}`);
         }
       }
     }
