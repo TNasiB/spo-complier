@@ -225,7 +225,7 @@ function processLine(line: Lexem[]): string {
   const input = [...line];
 
   while (input.length > 0) {
-    debugger;
+    // debugger;
     const currentToken = input[0];
     const topStack = stack.length > 0 ? stack[stack.length - 1] : null;
     const precedence = topStack ? getPrecedence(topStack, currentToken) : "shift";

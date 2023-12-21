@@ -6,7 +6,8 @@ const prepareTokensForShiftReduce = (lexems: Lexem[]): Lexem[][] => {
   const toASymbols: Lexem[] = lexems.map((lexem) => ({
     number: -1,
     type: lexem.type,
-    value: lexem.type === "Identifier" || lexem.type === "Constant" ? "a" : lexem.value,
+    value:
+      lexem.type === "Identifier" || lexem.type === "Roman numeral" ? "a" : lexem.value,
   }));
 
   const result = toASymbols.reduce((acc: Lexem[][], currentLexem) => {
@@ -105,6 +106,8 @@ export class ShiftReduce3 {
             value: "E",
           });
 
+          console.log(...tokensCopy);
+
           tokenIndex = 0;
           successReduce = true;
 
@@ -132,8 +135,8 @@ export class ShiftReduce3 {
   reduce() {
     for (let i = 0; i < this.tokens.length; i++) {
       const currentLine = [...this.tokens[i]];
+
       const parseResult = this.parseLine(currentLine);
-      console.log({ parseResult });
       if (parseResult.length === 1 && parseResult[0].value === "E") {
         console.log(`Строка ${i + 1} успешно разобрана`);
       } else {
