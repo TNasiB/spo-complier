@@ -43,13 +43,6 @@ namespace SPO_LR3
         static List<Lex> rule8 = new List<Lex>() { new Lex(-1, 5, "("), new Lex(-1, 1, "E"), new Lex(-1, 5, ")") };
         static List<Lex> rule7 = new List<Lex>() { new Lex(-1, 3, "not"), new Lex(-1, 5, "("), new Lex(-1, 1, "E"), new Lex(-1, 5, ")") };
         static List<Lex> rule9 = new List<Lex>() { new Lex(-1, 1, "alpha") };
-
-        List<List<Lex>> grammarList = new List<List<Lex>>()
-        {
-            rule1, rule2, rule3, rule4, rule5, rule6, rule7, rule8, rule9
-        };
-
-        enum PositionRules { Left, Right, Equivalent, Nothing };
         readonly int[,] ruleTable =
         {
             {0,1,1,1,1,0,0,1,0,3 }, //a
@@ -63,6 +56,13 @@ namespace SPO_LR3
             {2,0,0,0,0,0,0,0,0,0 }, //PustK
             {2,3,2,2,2,2,2,0,0,0 } // :=
         };
+        List<List<Lex>> grammarList = new List<List<Lex>>()
+        {
+            rule1, rule2, rule3, rule4, rule5, rule6, rule7, rule8, rule9
+        };
+
+        enum PositionRules { Left, Right, Equivalent, Nothing };
+
 
         public List<List<Lex>> LexemesRows { get => lexemesRows; }
         public List<string> Chains { get => chains; }

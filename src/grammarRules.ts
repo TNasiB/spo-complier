@@ -1,8 +1,10 @@
-import { GrammarRules } from "./types";
-
-export const grammarRules: GrammarRules = {
-  S: [["a", ":=", "F"]],
-  F: [["F", "or", "T"], ["F", "xor", "T"], ["T"]],
-  T: [["T", "and", "E"], ["E"]],
-  E: [["(", "F", ")"], ["not", "(", "F", ")"], ["a"]],
-};
+export const grammarRules = [
+  ["E", ":=", "E", ";"],
+  ["E", "or", "E"],
+  ["E", "xor", "E"],
+  ["E"],
+  ["E", "and", "E"],
+  ["(", "E", ")"],
+  ["not", "(", "E", ")"],
+  ["a"],
+];

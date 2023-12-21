@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { grammarRules } from "./grammarRules";
 import { lexicalAnalysis } from "./methods/lexAnalys";
-import { shiftReduce } from "./methods/shiftReduce";
 import { Lexem } from "./types";
+import { ShiftReduce3 } from "./methods/shiftReduce3";
 
 const LogicalExpressionAnalyzer: React.FC = () => {
   const [tokens, setTokens] = useState<Lexem[]>([]);
@@ -10,18 +9,19 @@ const LogicalExpressionAnalyzer: React.FC = () => {
   const [syntaxRes, setSyntaxRes] = useState<unknown>(null);
 
   useEffect(() => {
-    const lexems = lexicalAnalysis(content);
-    setTokens(lexems);
+    if (content) {
+      const lexems = lexicalAnalysis(content);
+      setTokens(lexems);
+    }
   }, [content]);
 
   useEffect(() => {
     if (tokens.length === 0) return;
-    const result = shiftReduce(grammarRules, tokens);
-    setSyntaxRes(result);
+    new ShiftReduce3(tokens);
   }, [tokens]);
 
   useEffect(() => {
-    console.log({ syntaxRes });
+    // console.log({ syntaxRes });
   }, [syntaxRes]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,9 +86,14 @@ const LogicalExpressionAnalyzer: React.FC = () => {
         <textarea
           readOnly
           value={content}
-          cols={30}
+          cols={40}
           rows={11}
-          style={{ resize: "none", border: "1px solid black", padding: "8px" }}
+          style={{
+            resize: "none",
+            border: "1px solid black",
+            padding: "8px",
+            alignSelf: "flex-start",
+          }}
         />
       </div>
     </div>

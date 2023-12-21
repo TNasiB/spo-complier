@@ -7,7 +7,7 @@ export type StackElement = {
   isTerminal: boolean;
 };
 export type Lexem = { number: number; type: string; value: string };
-
+export type WithTerminal = Lexem & { isTerminal: boolean };
 export enum PrecedenceEnum {
   Less = "<",
   Greater = ">",

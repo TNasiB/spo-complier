@@ -62,6 +62,14 @@ export function lexicalAnalysis(input: string): Lexem[] {
         });
       }
     });
+
+    if (words.length !== 0) {
+      tokens.push({
+        number: tokenNumber++,
+        type: "Delimiter",
+        value: ";",
+      });
+    }
   });
 
   if (braceCount > 0) {

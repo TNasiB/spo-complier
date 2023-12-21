@@ -1,0 +1,38 @@
+if Equeal or Less -> сдвиг
+if Greater -> свертка
+
+Если сравниваем с первым элемтом со стека и первым с потока
+
+
+[ a  :=  a  ;  a  :=  a  ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] сдвиг
+[ :=  a  ;  a  :=  a  ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a] сдвиг
+[  ;  a  :=  a  ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a := a ] сдвиг
+[ ;  a  :=  a  ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a := a] 
+
+
+
+
+
+
+
+
+
+
+
+[ :=  a  ;  a  :=  a  ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a] сдвиг
+[ a  ;  a  :=  a  ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=] сдвиг
+[ ;  a  :=  a  ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  a] свертка
+[ ;  a  :=  a  ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E] сдвиг
+[ a  :=  a  ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;] сдвиг
+[ :=  a  ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;  a] сдвиг
+[ a  ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;  a  :=] сдвиг
+[ ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;  a  :=  a] свертка
+[ ;  a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;  a  :=  E] сдвиг
+[ a  :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;  a  :=  E  ;] сдвиг
+[ :=  a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;  a  :=  E  ;  a] сдвиг
+[ a  or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;  a  :=  E  ;  a  :=] сдвиг
+[ or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;  a  :=  E  ;  a  :=  a] свертка
+[ or  a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;  a  :=  E  ;  a  :=  E] сдвиг
+[ a  ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;  a  :=  E  ;  a  :=  E  or] сдвиг
+[ ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;  a  :=  E  ;  a  :=  E  or  a] свертка
+[ ;  a  ;=  (  a  and  a  )  xor  (  not  a  ) ] [a  :=  E  ;  a  :=  E  ;  a  :=  E  or  E] сдвиг
