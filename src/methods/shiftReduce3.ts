@@ -35,8 +35,9 @@ export class ShiftReduce3 {
 
   constructor(lexem: Lexem[]) {
     this.tokens = prepareTokensForShiftReduce(lexem);
-
-    console.log(this.tokens);
+    console.log(...this.tokens[2]);
+    this.tokens.pop();
+    console.log(...this.tokens);
     this.checkPrecedence();
     this.reduce();
   }
